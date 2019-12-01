@@ -108,10 +108,42 @@ namespace Day1
 101217
 116287";
 
-            var result = input.Split(Environment.NewLine)
-                .Select(s => int.Parse(s)).Sum(mass => Math.Abs(mass / 3) - 2);
+            PartOne(input);
+            PartTwo(input);
+        }
 
-            System.Console.WriteLine(result);        
+        private static void PartTwo(string input)
+        {
+            var listOfMass = input.Split(Environment.NewLine).Select(s => int.Parse(s));
+
+            var totalFuel = listOfMass.Sum(mass => CalculateFuelPartTwo(mass));
+            
+            System.Console.WriteLine($"Part Two result: {totalFuel}");
+        }
+
+        private static int CalculateFuelPartTwo(int mass)
+        {
+            var fuelRequired = CalculateFuel(mass);
+            var totalModuleFuel = 0;
+            while (fuelRequired > 0)
+            {
+                totalModuleFuel += fuelRequired;
+                fuelRequired = CalculateFuel(fuelRequired);
+            }
+            return totalModuleFuel;
+        }
+
+        private static void PartOne(string input)
+        {
+            var result = input.Split(Environment.NewLine)
+                .Select(s => int.Parse(s)).Sum(mass => CalculateFuel(mass));
+
+            System.Console.WriteLine($"Part One result: {result}");
+        }
+
+        private static int CalculateFuel(int mass)
+        {
+            return Math.Abs(mass / 3) - 2;
         }
     }
 }
